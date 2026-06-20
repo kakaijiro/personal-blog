@@ -1,16 +1,16 @@
 -- ============================================================
--- functions.sql — personal-blog PostgreSQL 関数定義
--- 共通ルール:
---   security definer + set search_path = '' でセキュリティ確保
---   管理者操作は auth.uid() チェックで未認証を拒否
+-- functions.sql — personal-blog PostgreSQL function definitions
+-- Common rules:
+--   security definer + set search_path = '' for security
+--   Admin operations require auth.uid() check to reject unauthenticated calls
 -- ============================================================
 
 
 -- ============================================================
--- 公開関数（anon・authenticated 両方から呼べる）
+-- Public functions (callable by anon and authenticated)
 -- ============================================================
 
--- 全記事を公開日降順で返す
+-- Returns all posts ordered by published_at descending
 create or replace function public.get_all_posts()
 returns setof public.posts
 language sql
@@ -23,7 +23,7 @@ $$;
 grant execute on function public.get_all_posts() to anon, authenticated;
 
 
--- slug で1記事を返す
+-- Returns a single post by slug
 create or replace function public.get_post_by_slug(p_slug text)
 returns public.posts
 language sql
@@ -37,7 +37,7 @@ $$;
 grant execute on function public.get_post_by_slug(text) to anon, authenticated;
 
 
--- 最新 N 件を返す（デフォルト5件）
+-- Returns the N most recent posts (default: 5)
 create or replace function public.get_recent_posts(p_count int default 5)
 returns setof public.posts
 language sql
@@ -52,10 +52,10 @@ grant execute on function public.get_recent_posts(int) to anon, authenticated;
 
 
 -- ============================================================
--- 管理者関数（authenticated のみ）
+-- Admin functions (authenticated only)
 -- ============================================================
 
--- 記事の作成・更新（slug が重複したら UPDATE）
+-- Creates or updates a post (upsert by slug)
 create or replace function public.upsert_post(
   p_slug         text,
   p_title        text,
@@ -94,7 +94,7 @@ $$;
 grant execute on function public.upsert_post(text, text, text, text, timestamptz, text[], boolean) to authenticated;
 
 
--- 記事を slug で削除する
+-- Deletes a post by slug
 create or replace function public.delete_post(p_slug text)
 returns boolean
 language plpgsql
@@ -113,7 +113,7 @@ $$;
 grant execute on function public.delete_post(text) to authenticated;
 
 
--- 購読者一覧を登録日降順で返す（管理者専用）
+-- Returns all newsletter subscribers ordered by subscription date (admin only)
 create or replace function public.get_all_subscribers()
 returns setof public.newsletter_subscribers
 language plpgsql

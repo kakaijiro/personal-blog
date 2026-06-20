@@ -1,5 +1,5 @@
 -- ============================================================
--- newsletter_subscribers テーブル
+-- newsletter_subscribers table
 -- ============================================================
 create table if not exists public.newsletter_subscribers (
   id            uuid        primary key default gen_random_uuid(),
@@ -8,18 +8,18 @@ create table if not exists public.newsletter_subscribers (
 );
 
 -- ============================================================
--- RLS
+-- Row Level Security
 -- ============================================================
 alter table public.newsletter_subscribers enable row level security;
 
--- 未認証ユーザーがメールアドレスを登録できる
+-- Anyone (unauthenticated) can subscribe with their email
 create policy "Anyone can subscribe"
   on public.newsletter_subscribers
   for insert
   to anon
   with check (true);
 
--- 管理者（認証済み）のみ購読者一覧を閲覧・削除できる
+-- Only authenticated users (admin) can view or delete subscribers
 create policy "Authenticated can read subscribers"
   on public.newsletter_subscribers
   for select
@@ -33,7 +33,7 @@ create policy "Authenticated can delete subscribers"
   using (true);
 
 -- ============================================================
--- 重複メール登録を安全に処理する関数
+-- Function to safely handle duplicate email subscriptions
 -- ============================================================
 create or replace function public.subscribe_newsletter(p_email text)
 returns json

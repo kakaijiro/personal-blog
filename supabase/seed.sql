@@ -1,5 +1,5 @@
 -- ============================================================
--- seed.sql — posts 初期データ（data.json の8記事）
+-- seed.sql — Initial post data (8 articles from data.json)
 -- ============================================================
 truncate public.posts restart identity cascade;
 

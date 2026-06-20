@@ -1,12 +1,12 @@
 -- ============================================================
--- posts テーブル
+-- posts table
 -- ============================================================
 create table if not exists public.posts (
   id           uuid        primary key default gen_random_uuid(),
   slug         text        unique not null,
   title        text        not null,
   description  text,
-  content      text        not null,  -- Markdown 形式
+  content      text        not null,  -- Markdown format
   published_at timestamptz not null,
   tags         text[]      not null default '{}',
   featured     boolean     not null default false,
@@ -14,17 +14,17 @@ create table if not exists public.posts (
 );
 
 -- ============================================================
--- RLS
+-- Row Level Security
 -- ============================================================
 alter table public.posts enable row level security;
 
--- 誰でも読める（公開ブログ）
+-- Anyone can read published posts
 create policy "Public can read posts"
   on public.posts
   for select
   using (true);
 
--- 書き込みは認証ユーザー（管理者）のみ
+-- Only authenticated users (admin) can write
 create policy "Authenticated can insert posts"
   on public.posts
   for insert
