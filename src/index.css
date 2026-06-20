@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 0 0% 100%;
+    --bg-secondary: 30 33% 97%;
+    --border: 30 11% 93%;
+    --text-primary: 26 7% 19%;
+    --text-secondary: 30 3% 28%;
+    --accent: 206 95% 78%;
+  }
+
+  .dark {
+    --bg: 20 6% 10%;
+    --bg-secondary: 20 5% 12%;
+    --border: 26 7% 19%;
+    --text-primary: 0 0% 100%;
+    --text-secondary: 0 1% 75%;
+    --accent: 206 61% 67%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--bg));
+    color: hsl(var(--text-secondary));
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: hsl(var(--accent) / 0.3);
+  }
+}
