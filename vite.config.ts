@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 export default defineConfig({
-  base: '/personal-blog/',
   plugins: [react()],
   resolve: {
     alias: {
